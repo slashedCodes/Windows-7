@@ -26,6 +26,7 @@ export default class Window {
         this.minimizeButton = this.window.query(`#minimize-${this.id}`);
         this.maximizeButton = this.window.query(`#maximize-${this.id}`);
         this.titleBar = this.window.query(`#title-bar-${this.id}`);
+        this.content = this.window.query(`#content-${this.id}`);
 
         // Set titlebar actions
         this.closeButton.addEventListener("click", () => {
@@ -86,15 +87,15 @@ export default class Window {
             this.window.elm.style.left = "0px";
             this.window.elm.style.top = "0px";
 
-            document.getElementById(`content-${this.id}`).style["min-width"] = (window.innerWidth) + "px";
-            document.getElementById(`content-${this.id}`).style["min-height"] = (window.innerHeight) + "px";
+            this.content.style["min-width"] = (window.innerWidth) + "px";
+            this.content.style["min-height"] = (window.innerHeight) + "px";
         } else {
             // Otherwise position and size it according to the posX, posY, width and height variables
             this.window.elm.style.left = this.posX + "px";
             this.window.elm.style.top = this.posY + "px";
 
-            document.getElementById(`content-${this.id}`).style["min-width"] = this.width;
-            document.getElementById(`content-${this.id}`).style["min-height"] = this.height;
+            this.content.style["min-width"] = this.width;
+            this.content.style["min-height"] = this.height;
         }
 
         // Focus window
@@ -116,7 +117,7 @@ export default class Window {
             this.window = new Html("div")
                 .class("window", "glass", "active")
                 .id(`window-${this.id}`)
-                .style({ "min-width": this.width + "px", "min-height": this.height + "px", "position": "absolute", "left": this.posX + "px", "top": this.posY + "px", "user-select": "none" })
+                .style({ "position": "absolute", "left": this.posX + "px", "top": this.posY + "px", "user-select": "none" })
                 .appendMany(
                     new Html("div").class("title-bar").id(`title-bar-${this.id}`)
                         .appendMany(
@@ -129,7 +130,11 @@ export default class Window {
                                 )
                         ),
 
-                    new Html("div").class("window-body", "has-space").id(`content-${this.id}`).append(new Html("p").text("baller"))
+                    new Html("div")
+                        .class("window-body", "has-space")
+                        .id(`content-${this.id}`)
+                        .style({ "min-width": this.width + "px", "min-height": this.height + "px" })
+                        .append(new Html("p").text("Hello 7.css!"))
                 )
                 .appendTo(this.parent);
             return this;
